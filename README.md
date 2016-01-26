@@ -11,7 +11,7 @@ DL-IRC is built to be run under node.js, so that will need to be installed on yo
 	* Used to interface with the YouTube API to perform searches based on keyword.
 
 ## Setup
-Coming soon when I am less tired :3
+Coming soon.
 
 ## Extending
-Coming soon when I am less tired :3
+Coming soon.
