@@ -29,7 +29,7 @@ data.config = config;
 //Register nick upon connection to the network
 bot.addListener("registered", function(message) {
 	//Use this to register your bot's nick.
-    bot.say("nickserv", 'command to nickserv');
+    bot.say("nickserv", config.nickservMessage);
 });
 
 //Function that handles message to the bot, or to a channel the bot sits in

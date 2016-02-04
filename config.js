@@ -15,6 +15,7 @@ exports.data = {
 
 exports.config = {
 	botName: "DL-IRC",
+    nickservMessage: "identify <YOUR PASSWORD>",
 	servers: [
 		{
 			serverName: 'servername',
