@@ -7,6 +7,8 @@ An extensible JavaScript IRC bot developed with several node packages that can d
 	* Used to interface with IRC.
 * youtube-node
 	* Used to interface with the YouTube API to perform searches based on keyword.
+* youtube-dl
+    * A wrapper around youtube-dl to make the calls a little easier
 
 ### Other
 * libicu-dev
