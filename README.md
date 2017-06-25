@@ -14,7 +14,11 @@ An extensible JavaScript IRC bot developed with several node packages that can d
 * ffmpeg for audio extraction
 
 ## Setup
-Coming soon.
+* npm install
+* Edit config for bot information in obivous places.
+* Go into the youtube module and add your API key
 
 ## Extending
-Coming soon.
+* You can add custom commands by editing the config. See the examples in the
+file for how to do this.
+* Commands can be restricted to specific users if you so choose.
