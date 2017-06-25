@@ -1,4 +1,7 @@
 {
+  "scripts":  {
+    "start": "node dl-irc.js"
+  },
   "dependencies": {
     "irc": "^0.5.2",
     "youtube-dl": "^1.11.1",
