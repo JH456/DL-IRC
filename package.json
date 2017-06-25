@@ -1,10 +1,13 @@
 {
-  "scripts":  {
-    "start": "node dl-irc.js"
+  "scripts": {
+    "start": "nodemon dl-irc.js"
   },
   "dependencies": {
     "irc": "^0.5.2",
     "youtube-dl": "^1.11.1",
     "youtube-node": "^1.3.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.11.0"
   }
 }
