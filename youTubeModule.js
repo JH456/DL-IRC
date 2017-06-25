@@ -4,7 +4,7 @@ var fs = require('fs');
 var youtubedl = require('youtube-dl');
 var YouTube = require('youtube-node');
 var youTube = new YouTube();
-youTube.setKey('YOUTUBE API KEY THAT YOU NEED');
+youTube.setKey(process.env.IRC_YOUTUBE_API_KEY);
 
 function search (data, query, numResults, callback)
 {

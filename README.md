@@ -17,8 +17,19 @@ An extensible JavaScript IRC bot developed with several node packages that can d
 
 ## Setup
 * npm install
-* Edit config for bot information in obivous places.
-* Go into the youtube module and add your API key
+* All user configuration information is grabbed from environment variables
+right now. Make a file like this and source it.
+```bash
+#!/bin/bash
+
+export IRC_YOUTUBE_API_KEY=YOUR-API-KEY
+export IRC_BOT_NAME=Botname
+export IRC_NICKSERV_PASS=NickservPassForYourBot
+export IRC_SERVER_NAME=irc.whatever.net
+export IRC_CHANNEL_NAME=#channel
+export IRC_DOWNLOAD_USER=UserAllowedToDownloadThings
+```
+* node dl-irc.js
 
 ## Extending
 * You can add custom commands by editing the config. See the examples in the
