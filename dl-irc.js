@@ -62,7 +62,7 @@ function handleMessage (from, to, text, message, pm) {
         var action = getFunction(command);
 
         //If the action is valid
-        if (action != -1) {
+        if (action) {
             //Call the function with the arguments, and pass it data
             argFunctions.call(bot, messageInfo, args, action);
         }
@@ -92,11 +92,15 @@ bot.addListener("message", function (from, to, text, message) {
 
 //Get the function associated with the given name
 function getFunction (name) {
-    for (var i = 0; i < config.commands.length; i++) {
-        var names = config.commands[i].names;
-        for (var j = 0; j < names.length; j++) {
-            if (names[j] == name) return i;
+    let command;
+    config.botModules.forEach(moduleName => {
+        let moduleCommands = require('./bot_modules/' + moduleName).commands
+        for (var i = 0; i < moduleCommands.length; i++) {
+            var names = moduleCommands[i].names;
+            for (var j = 0; j < names.length; j++) {
+                if (names[j] == name) command = moduleCommands[i];
+            }
         }
-    }
-    return -1;
+    })
+    return command;
 }

@@ -12,10 +12,10 @@ function argumentsException (bot, messageInfo) {
 
 exports.call = function (bot, messageInfo, args, command) {
     var called = false;
-    var functions = config.commands[command].functions;
+    var functions = command.functions;
 
-    if (config.commands[command].allowedUsers != 'ALL'
-    && config.commands[command].allowedUsers.indexOf(
+    if (command.allowedUsers != 'ALL'
+    && command.allowedUsers.indexOf(
     messageInfo.from) == -1) {
         bot.say(messageInfo.channel, "Permission denied.");
         return;
