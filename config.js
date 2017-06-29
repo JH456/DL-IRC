@@ -1,5 +1,3 @@
-var youTube = require('./bot_modules/youtube');
-
 module.exports = {
     botName: process.env.IRC_BOT_NAME,
     nickservMessage: 'identify ' + process.env.IRC_NICKSERV_PASS,
