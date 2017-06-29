@@ -6,11 +6,8 @@ var YouTube = require('youtube-node');
 var youTube = new YouTube();
 youTube.setKey(process.env.IRC_YOUTUBE_API_KEY);
 
-function search (data, query, numResults, callback)
+function search (bot, messageInfo, query, numResults, callback)
 {
-    // First argument is the search query, the second is the number of results.
-    // Gets the titles and urls of the results and stores them into an array that
-    // it passes to the callback.
     youTube.search(query, numResults, function(error, result) {
         var videoResults = new Array();
         if (error) {
@@ -38,8 +35,8 @@ function search (data, query, numResults, callback)
     });
 }
 
-function getVideo (data, videoObject) {
-    data.bot.say(data.runTime.channel, "Getting " + videoObject.title);
+function getVideo (bot, messageInfo, videoObject) {
+    bot.say(messageInfo.channel, "Getting " + videoObject.title);
     var video = youtubedl(videoObject.url,
         // Optional arguments passed to youtube-dl.
         ['--format=18'],
@@ -53,46 +50,31 @@ function getVideo (data, videoObject) {
     });
 }
 
-function lookupCallback (data, videoResults) {
-    data.runTime.videoOptions = [];
-    data.bot.say(data.runTime.channel, "Here are your options:");
-    for (var i = 0; i < videoResults.length; i++) {
-        data.runTime.videoOptions.push({
-            url: videoResults[i].url,
-            title: videoResults[i].title
-        });
-        data.bot.say(data.runTime.channel,
-            (i + 1) + ": " + videoResults[i].title);
-    }
+function lookupCallback (bot, messageInfo, videoResults) {
+    bot.say(messageInfo.channel, "Here are your options:");
+    videoResults.forEach(videoResult => {
+        bot.say(messageInfo.channel, "- " + videoResult.title)
+    })
 }
 
-exports.getByName = function (data, args)
+exports.getByName = function (bot, messageInfo, args)
 {
-    search(data, args[0], 1, function (videoResults) {
+    search(bot, messageInfo, args[0], 1, function (videoResults) {
 
         if (videoResults.length == 0) return;
 
-        getVideo(data, videoResults[0]);
+        getVideo(bot, messageInfo, videoResults[0]);
         });
 }
 
-exports.getByNumber = function (data, args)
-{
-    if (args[0] > data.runTime.videoOptions.length || args[0] < 1) {
-        data.bot.say(data.runTime.channel,
-            "Sorry, but there is no video listed under that number...");
-    }
-    else getVideo(data, data.runTime.videoOptions[args[0]-1]);
-}
-
-exports.lookupOne = function (data, args) {
-    search(data, args[0], 1, function (videoResults) {
-        lookupCallback(data, videoResults);
+exports.lookupOne = function (bot, messageInfo, args) {
+    search(bot, messageInfo, args[0], 1, function (videoResults) {
+        lookupCallback(bot, messageInfo, videoResults);
     });
 }
 
-exports.lookupMultiple = function (data, args) {
-    search(data, args[1], args[0], function (videoResults) {
-        lookupCallback(data, videoResults);
+exports.lookupMultiple = function (bot, messageInfo, args) {
+    search(bot, messageInfo, args[1], args[0], function (videoResults) {
+        lookupCallback(bot, messageInfo, videoResults);
     });
 }

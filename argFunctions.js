@@ -4,19 +4,20 @@
 *    Handles arguments exceptions and calling custom functions
 */
 
-function argumentsException (data) {
-    data.bot.say(data.runTime.channel,
-    'Sorry, but your arguments are wrong...');
+let config = require('./config')
+
+function argumentsException (bot, messageInfo) {
+    bot.say(messageInfo.channel, 'Incorrect arguments.');
 }
 
-exports.call = function (data, args, command) {
+exports.call = function (bot, messageInfo, args, command) {
     var called = false;
-    var functions = data.config.commands[command].functions;
+    var functions = config.commands[command].functions;
 
-    if (data.config.commands[command].allowedUsers != 'ALL'
-    && data.config.commands[command].allowedUsers.indexOf(
-    data.runTime.from) == -1) {
-        data.bot.say(data.runTime.channel, "Permission denied. T_T");
+    if (config.commands[command].allowedUsers != 'ALL'
+    && config.commands[command].allowedUsers.indexOf(
+    messageInfo.from) == -1) {
+        bot.say(messageInfo.channel, "Permission denied.");
         return;
     }
 
@@ -70,8 +71,8 @@ exports.call = function (data, args, command) {
         }
         if (invalid) continue;
         called = true;
-        functions[i].funcRef(data, r);
+        functions[i].funcRef(bot, messageInfo, r);
     }
 
-    if (!called) argumentsException(data);
+    if (!called) argumentsException(bot, messageInfo);
 }

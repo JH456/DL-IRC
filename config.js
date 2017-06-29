@@ -6,14 +6,7 @@
 
 var youTube = require('./youTubeModule.js');
 
-exports.data = {
-    modules: {
-        youTube: youTube
-    },
-    runTime: {}
-}
-
-exports.config = {
+module.exports = {
     botName: process.env.IRC_BOT_NAME,
     nickservMessage: 'identify ' + process.env.IRC_NICKSERV_PASS,
     servers: [
@@ -34,10 +27,6 @@ exports.config = {
         {
             names: ['download'],
             functions: [
-                {
-                    argsCode: ['i'],
-                    funcRef: youTube.getByNumber
-                },
                 {
                     argsCode: ['a'],
                     funcRef: youTube.getByName

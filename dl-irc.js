@@ -8,9 +8,7 @@
 //Include some files
 var irc = require("irc");
 var argFunctions = require('./argFunctions.js');
-var rootConfig = require('./config.js');
-var config = rootConfig.config;
-var data = rootConfig.data;
+var config = require('./config.js');
 
 //Declare and initialize the bot
 var bot = new irc.Client(config.servers[0].serverName, config.botName, {
@@ -22,10 +20,6 @@ var bot = new irc.Client(config.servers[0].serverName, config.botName, {
     realName: config.botName
 });
 
-//Create a data object to pass into custom bot functions
-data.bot = bot;
-data.config = config;
-
 //Register nick upon connection to the network
 bot.addListener("registered", function(message) {
     //Use this to register your bot's nick.
@@ -35,19 +29,13 @@ bot.addListener("registered", function(message) {
 //Function that handles message to the bot, or to a channel the bot sits in
 function handleMessage (from, to, text, message, pm) {
 
-    //Nick that sent the message
-    data.runTime.from = from;
-    //Where the message was sent
-    data.runTime.to = to;
-    //The text within the message
-    data.runTime.text = text;
-    //The message itself
-    data.runTime.message = message;
-    //The channel the message passed through. If it was a pm, it is just the
-    //user who it was from. Otherwise, it is an element of message.args.
-    data.runTime.channel = pm ? from : message.args[0];
-
-    var runTime = data.runTime;
+    let messageInfo = {
+        from,
+        to,
+        text,
+        message,
+        channel: pm ? from : message.args[0],
+    }
 
     //If the message is a command
     if (text.indexOf('*') == 0 && text.length > 1 && text[1] != ' ') {
@@ -76,10 +64,10 @@ function handleMessage (from, to, text, message, pm) {
         //If the action is valid
         if (action != -1) {
             //Call the function with the arguments, and pass it data
-            argFunctions.call(data, args, action);
+            argFunctions.call(bot, messageInfo, args, action);
         }
         //If the action does not exist, return an error instead
-        else bot.say(runTime.channel, '404: Command not found');
+        else bot.say(messageInfo.channel, '404: Command not found');
     }
 
     //Determine if any trigger words were said
@@ -88,7 +76,7 @@ function handleMessage (from, to, text, message, pm) {
             if (text.toLowerCase().indexOf(
             config.responseConfig[i].triggers[j]) != -1) {
                 //Say the response
-                bot.say(runTime.channel, config.responseConfig[i].response);
+                bot.say(messageInfo.channel, config.responseConfig[i].response);
             }
         }
     }
