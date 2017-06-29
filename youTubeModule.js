@@ -48,6 +48,10 @@ function getVideo (bot, messageInfo, videoObject) {
         var title = videoObject.title.replace('/', '');
         video.pipe(fs.createWriteStream(title + '.mp4'));
     });
+    video.on('end', () => {
+        bot.say(messageInfo.channel, 'Finished Downloading '
+            + videoObject.title)
+    })
 }
 
 function lookupCallback (bot, messageInfo, videoResults) {
