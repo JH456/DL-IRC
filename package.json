@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "start": "nodemon dl-irc.js"
+    "start": "nodemon server.js"
   },
   "dependencies": {
     "irc": "^0.5.2",
