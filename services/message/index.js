@@ -15,17 +15,48 @@ function getFunction(name) {
     return command;
 }
 
+function tokenizeCommand(text) {
+    let rawArgs = text.split(' ');
+    let commandName = rawArgs.splice(0, 1)[0].substring(1).toLowerCase()
+
+    let args = []
+    let arg = ''
+    let pop = true
+    rawArgs.forEach(rawArg => {
+        if (rawArg.startsWith('"')) {
+            pop = !pop
+            arg += rawArg.substring(1)
+        } else if (rawArg.endsWith('"')) {
+            pop = !pop
+            arg += rawArg.substring(0, rawArg.length - 1)
+        } else {
+            arg += rawArg
+        }
+
+        if (!pop) {
+            arg += " "
+        } else {
+            args.push(arg)
+            arg = ''
+        }
+    })
+
+    return {
+        name: commandName,
+        args
+    }
+}
+
 function handleCommand(bot, messageInfo) {
     let text = messageInfo.text
     if (text.indexOf('*') == 0 && text.length > 1 && text[1] != ' ') {
 
-        let args = text.split(' ');
-        let command = args.splice(0, 1)[0].substring(1).toLowerCase()
+        let command = tokenizeCommand(text)
 
-        var action = getFunction(command);
+        var commandFunction = getFunction(command.name);
 
-        if (action) {
-            argFunctions.call(bot, messageInfo, args, action);
+        if (commandFunction) {
+            argFunctions.call(bot, messageInfo, command.args, commandFunction);
         } else {
             bot.say(messageInfo.channel, 'Command not found');
         }
