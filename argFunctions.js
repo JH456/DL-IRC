@@ -50,16 +50,6 @@ exports.call = function (bot, messageInfo, args, command) {
                     invalid = true;
                     break;
                 }
-            } else if (argsCode[j] == 'a') {
-                if (j == argsCode.length-1) {
-                    for (var k = j; k < args.length; k++) {
-                        if (j == k) r[j] = args[k];
-                        else r[j] += ' ' + args[k];
-                    }
-                } else {
-                    invalid = true;
-                    break;
-                }
             } else r[j] = args[j];
         }
 

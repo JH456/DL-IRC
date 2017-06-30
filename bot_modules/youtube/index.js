@@ -6,7 +6,7 @@ module.exports = {
             names: ['download'],
             functions: [
                 {
-                    argsCode: ['a'],
+                    argsCode: ['s'],
                     funcRef: youtube.getByName
                 }
             ],
@@ -26,11 +26,11 @@ module.exports = {
             names: ['lookup'],
             functions: [
                 {
-                    argsCode: ['i', 'a'],
+                    argsCode: ['i', 's'],
                     funcRef: youtube.lookupMultiple
                 },
                 {
-                    argsCode: ['a'],
+                    argsCode: ['s'],
                     funcRef: youtube.lookupOne
                 }
             ],
