@@ -9,6 +9,7 @@ module.exports = {
             ]
         }
     ],
+    botModule: 'irc',
     userModules: [
         'youtube'
     ],
