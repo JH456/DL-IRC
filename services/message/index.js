@@ -1,8 +1,6 @@
-let config = require('../../config')
-
-function getFunction(name) {
+function getFunction(name, userModules) {
     let command;
-    config.userModules.forEach(moduleName => {
+    userModules.forEach(moduleName => {
         let moduleCommands = require('../../user_modules/' + moduleName).commands
         for (var i = 0; i < moduleCommands.length; i++) {
             var names = moduleCommands[i].names;
@@ -107,13 +105,13 @@ function tokenizeCommand(text) {
     }
 }
 
-function handleCommand(bot, messageInfo) {
+function handleCommand(bot, userModules, messageInfo) {
     let text = messageInfo.text
     if (text.indexOf('*') == 0 && text.length > 1 && text[1] != ' ') {
 
         let command = tokenizeCommand(text)
 
-        var commandFunction = getFunction(command.name);
+        var commandFunction = getFunction(command.name, userModules);
 
         if (commandFunction) {
             executeCommand(bot, messageInfo, command.args, commandFunction);
@@ -123,12 +121,12 @@ function handleCommand(bot, messageInfo) {
     }
 }
 
-function handleResponse(bot, messageInfo) {
-    for (var i = 0; i < config.responseConfig.length; i++) {
-        for (var j = 0; j < config.responseConfig[i].triggers.length; j++) {
+function handleResponse(bot, responses, messageInfo) {
+    for (var i = 0; i < responses.length; i++) {
+        for (var j = 0; j < responses[i].triggers.length; j++) {
             if (messageInfo.text.toLowerCase().indexOf(
-            config.responseConfig[i].triggers[j]) != -1) {
-                bot.say(messageInfo.channel, config.responseConfig[i].response);
+            responses[i].triggers[j]) != -1) {
+                bot.say(messageInfo.channel, responses[i].response);
             }
         }
     }

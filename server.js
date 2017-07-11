@@ -1,5 +1,26 @@
-var config = require('./config.js');
-let botModule = require('./bot_modules/' + config.botModule)
-let messageService = require('./services/message')
+let botModule = require('./bot_modules')
 
-let bot = botModule.create()
+let config = {
+    botName: process.env.IRC_BOT_NAME,
+    nickservMessage: 'identify ' + process.env.IRC_NICKSERV_PASS,
+    servers: [
+        {
+            serverName: process.env.IRC_SERVER_NAME,
+            channels: [
+                process.env.IRC_CHANNEL_NAME
+            ]
+        }
+    ],
+    botModule: 'irc',
+    userModules: [
+        'youtube'
+    ],
+    responses: [
+        {
+            triggers: ['oman'],
+            response: 'yemen'
+        }
+    ]
+}
+
+let bot = botModule.start(config)

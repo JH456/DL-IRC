@@ -1,8 +1,7 @@
 const irc = require('irc')
-const config = require('../../config')
 const messageService = require('../../services/message')
 
-function create() {
+function start(config) {
     var bot = new irc.Client(config.servers[0].serverName, config.botName, {
         channels: config.servers[0].channels,
         userName: config.botName.toLowerCase(),
@@ -21,18 +20,17 @@ function create() {
 
         let messageInfo = {
             from,
-            to,
             text,
             message,
             channel: isPm ? from : message.args[0],
             isPm
         }
 
-        messageService.handleCommand(bot, messageInfo);
-        messageService.handleResponse(bot, messageInfo)
+        messageService.handleCommand(bot, config.userModules, messageInfo);
+        messageService.handleResponse(bot, config.responses, messageInfo)
     });
 }
 
 module.exports = {
-    create
+    start
 }
