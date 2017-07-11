@@ -2,3 +2,4 @@
 node_modules
 *.sh
 *.mp4
+package-lock.json

@@ -1,10 +1,9 @@
 let config = require('../../config')
-var argFunctions = require('../../argFunctions');
 
 function getFunction(name) {
     let command;
-    config.botModules.forEach(moduleName => {
-        let moduleCommands = require('../../bot_modules/' + moduleName).commands
+    config.userModules.forEach(moduleName => {
+        let moduleCommands = require('../../user_modules/' + moduleName).commands
         for (var i = 0; i < moduleCommands.length; i++) {
             var names = moduleCommands[i].names;
             for (var j = 0; j < names.length; j++) {
@@ -13,6 +12,67 @@ function getFunction(name) {
         }
     })
     return command;
+}
+
+function argumentsException (bot, messageInfo) {
+    bot.say(messageInfo.channel, 'Incorrect arguments.');
+}
+
+function executeCommand(bot, messageInfo, args, command) {
+    var called = false;
+    var functions = command.functions;
+
+    if (command.allowedUsers != 'ALL'
+    && command.allowedUsers.indexOf(
+    messageInfo.from) == -1) {
+        bot.say(messageInfo.channel, "Permission denied.");
+        return;
+    }
+
+    for (var i = 0; i < functions.length && !called; i++) {
+
+        var argsCode = functions[i].argsCode;
+
+        // If argscode is just a number rather than an array, make r an array
+        //of length 0, otherwise make it an array of argscode's length
+        var r = typeof argsCode == 'number'
+        ? new Array(0)
+        : new Array(argsCode.length);
+
+        if ( !(argsCode == 0 && args.length == 0)
+        && (argsCode.length != args.length)
+        && (argsCode[argsCode.length-1] != 'a') ) {
+            continue;
+        }
+        var invalid = false;
+        for (var j = 0; j < argsCode.length; j++) {
+            if (argsCode[j] == 'n') {
+                r[j] = parseFloat(args[j]);
+                if (isNaN(r[j])) {
+                    invalid = true;
+                    break;
+                }
+            } else if (argsCode[j] == 'i') {
+                r[j] = parseInt(args[j]);
+                if (isNaN(r[j])) {
+                    invalid = true;
+                    break;
+                }
+            } else r[j] = args[j];
+        }
+
+        for (var j = 0; j < r.length; j++) {
+            if (r[j] == undefined) {
+                invalid = true;
+                break;
+            }
+        }
+        if (invalid) continue;
+        called = true;
+        functions[i].funcRef(bot, messageInfo, r);
+    }
+
+    if (!called) argumentsException(bot, messageInfo);
 }
 
 function tokenizeCommand(text) {
@@ -56,7 +116,7 @@ function handleCommand(bot, messageInfo) {
         var commandFunction = getFunction(command.name);
 
         if (commandFunction) {
-            argFunctions.call(bot, messageInfo, command.args, commandFunction);
+            executeCommand(bot, messageInfo, command.args, commandFunction);
         } else {
             bot.say(messageInfo.channel, 'Command not found');
         }

@@ -9,7 +9,7 @@ module.exports = {
             ]
         }
     ],
-    botModules: [
+    userModules: [
         'youtube'
     ],
     responseConfig: [
