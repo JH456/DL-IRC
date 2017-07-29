@@ -147,9 +147,22 @@ function createHandler(bot, userModuleNames, commandPrefix) {
         })
     }
 
+    function handleMessage(messageInfo, commandTriggered, responseTriggered) {
+        userModules.map(module => module.messageHandler).forEach((handler) => {
+            if (handler) {
+                handler(messageInfo, commandTriggered, responseTriggered)
+            }
+        })
+    }
+
+    function handle(messageInfo) {
+        let commandTriggered = handleCommand(messageInfo)
+        let responseTriggered = handleResponse(messageInfo)
+        handleMessage(messageInfo, commandTriggered, responseTriggered)
+    }
+
     return {
-        handleCommand,
-        handleResponse
+        handle
     }
 }
 

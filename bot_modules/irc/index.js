@@ -31,8 +31,7 @@ function addListenersTo(bot, handler, config) {
             isPm
         }
 
-        handler.handleCommand(messageInfo);
-        handler.handleResponse(messageInfo)
+        handler.handle(messageInfo)
     });
 }
 

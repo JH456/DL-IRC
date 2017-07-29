@@ -1,5 +1,19 @@
+const silly = require('./service')
+
 module.exports = {
-    commands: [],
+    commands: [
+        {
+            names: ['count', 'c'],
+            functions: [
+                {
+                    argsCode: 0,
+                    funcRef: silly.printCount
+                }
+            ],
+            allowedUsers: 'ALL',
+            desc: 'Prints out how many messages had yo in them'
+        },
+    ],
     responses: [
         {
             triggers: ['oman'],
@@ -10,5 +24,5 @@ module.exports = {
             response: 'hey yo!'
         }
     ],
-    messageHandler: null
+    messageHandler: silly.yoHandler
 }
