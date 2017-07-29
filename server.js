@@ -23,6 +23,5 @@ let config = {
     ]
 }
 
-console.log(botModule)
 let bot = botModule.create(config)
 botModule.addListenersTo(bot, config)
