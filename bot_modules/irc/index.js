@@ -1,7 +1,7 @@
 const irc = require('irc')
 const messageService = require('../../services/message')
 
-function start(config) {
+function create(config) {
     var bot = new irc.Client(config.servers[0].serverName, config.botName, {
         channels: config.servers[0].channels,
         userName: config.botName.toLowerCase(),
@@ -15,6 +15,12 @@ function start(config) {
         bot.say("nickserv", config.nickservMessage);
     });
 
+    bot.config = config
+
+    return bot
+}
+
+function addListenersTo(bot, config) {
     bot.addListener("message", function (from, to, text, message) {
         let isPm = to === config.botName
 
@@ -32,5 +38,6 @@ function start(config) {
 }
 
 module.exports = {
-    start
+    create,
+    addListenersTo
 }
