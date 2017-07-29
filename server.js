@@ -12,6 +12,7 @@ let config = {
         }
     ],
     botModule: 'irc',
+    commandPrefix: '*',
     userModules: [
         'youtube'
     ],

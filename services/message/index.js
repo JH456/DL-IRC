@@ -73,9 +73,10 @@ function executeCommand(bot, messageInfo, args, command) {
     if (!called) argumentsException(bot, messageInfo);
 }
 
-function tokenizeCommand(text) {
+function tokenizeCommand(text, commandPrefix) {
     let rawArgs = text.split(' ');
-    let commandName = rawArgs.splice(0, 1)[0].substring(1).toLowerCase()
+    let commandName = rawArgs.splice(0, 1)[0]
+        .substring(commandPrefix.length).toLowerCase()
 
     let args = []
     let arg = ''
@@ -105,7 +106,7 @@ function tokenizeCommand(text) {
     }
 }
 
-function createHandler(bot, userModuleNames, responses) {
+function createHandler(bot, userModuleNames, responses, commandPrefix) {
 
     let userModules = []
 
@@ -115,9 +116,11 @@ function createHandler(bot, userModuleNames, responses) {
 
     function handleCommand(messageInfo) {
         let text = messageInfo.text
-        if (text.indexOf('*') == 0 && text.length > 1 && text[1] != ' ') {
+        if (text.indexOf(commandPrefix) == 0
+            && text.length > commandPrefix.length
+            && text[commandPrefix.length] != ' ') {
 
-            let command = tokenizeCommand(text)
+            let command = tokenizeCommand(text, commandPrefix)
 
             var commandFunction = getFunction(command.name, userModules);
 
