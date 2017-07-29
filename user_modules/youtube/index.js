@@ -44,6 +44,7 @@ module.exports = {
                 + ' of all arguments, and mention the arguments in the order'
                 + ' that they are needed in the function call.'
         }
-    ]
-
+    ],
+    responses: [],
+    messageHandler: null
 }

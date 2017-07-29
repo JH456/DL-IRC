@@ -8,7 +8,7 @@ function create(config) {
 function addListenersTo(bot, config) {
     const botModule = require("./" + config.botModule)
     let handler = messageService.createHandler(bot, config.userModules,
-        config.responses, config.commandPrefix)
+        config.commandPrefix)
     return botModule.addListenersTo(bot, handler, config)
 }
 

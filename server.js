@@ -14,13 +14,8 @@ let config = {
     botModule: 'irc',
     commandPrefix: '*',
     userModules: [
-        'youtube'
-    ],
-    responses: [
-        {
-            triggers: ['oman'],
-            response: 'yemen'
-        }
+        'youtube',
+        'silly'
     ]
 }
 

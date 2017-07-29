@@ -106,7 +106,7 @@ function tokenizeCommand(text, commandPrefix) {
     }
 }
 
-function createHandler(bot, userModuleNames, responses, commandPrefix) {
+function createHandler(bot, userModuleNames, commandPrefix) {
 
     let userModules = []
 
@@ -133,14 +133,18 @@ function createHandler(bot, userModuleNames, responses, commandPrefix) {
     }
 
     function handleResponse(messageInfo) {
-        for (var i = 0; i < responses.length; i++) {
-            for (var j = 0; j < responses[i].triggers.length; j++) {
-                if (messageInfo.text.toLowerCase().indexOf(
-                responses[i].triggers[j]) != -1) {
-                    bot.say(messageInfo.channel, responses[i].response);
+        userModules.map(module => module.responses).forEach((responses) => {
+            if (responses) {
+                for (var i = 0; i < responses.length; i++) {
+                    for (var j = 0; j < responses[i].triggers.length; j++) {
+                        if (messageInfo.text.toLowerCase().indexOf(
+                        responses[i].triggers[j]) != -1) {
+                            bot.say(messageInfo.channel, responses[i].response);
+                        }
+                    }
                 }
             }
-        }
+        })
     }
 
     return {
