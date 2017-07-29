@@ -158,7 +158,7 @@ function createHandler(bot, userModuleNames, commandPrefix) {
     function handle(messageInfo) {
         let commandTriggered = handleCommand(messageInfo)
         let responseTriggered = handleResponse(messageInfo)
-        handleMessage(messageInfo, commandTriggered, responseTriggered)
+        handleMessage(bot, messageInfo, commandTriggered, responseTriggered)
     }
 
     return {
