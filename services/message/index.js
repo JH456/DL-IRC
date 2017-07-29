@@ -1,7 +1,7 @@
 function getFunction(name, userModules) {
     let command;
-    userModules.forEach(moduleName => {
-        let moduleCommands = require('../../user_modules/' + moduleName).commands
+    userModules.forEach(module => {
+        let moduleCommands = module.commands
         for (var i = 0; i < moduleCommands.length; i++) {
             var names = moduleCommands[i].names;
             for (var j = 0; j < names.length; j++) {
@@ -105,34 +105,47 @@ function tokenizeCommand(text) {
     }
 }
 
-function handleCommand(bot, userModules, messageInfo) {
-    let text = messageInfo.text
-    if (text.indexOf('*') == 0 && text.length > 1 && text[1] != ' ') {
+function createHandler(bot, userModuleNames, responses) {
 
-        let command = tokenizeCommand(text)
+    let userModules = []
 
-        var commandFunction = getFunction(command.name, userModules);
+    userModuleNames.forEach(moduleName => {
+        userModules.push(require('../../user_modules/' + moduleName))
+    })
 
-        if (commandFunction) {
-            executeCommand(bot, messageInfo, command.args, commandFunction);
-        } else {
-            bot.say(messageInfo.channel, 'Command not found');
-        }
-    }
-}
+    function handleCommand(messageInfo) {
+        let text = messageInfo.text
+        if (text.indexOf('*') == 0 && text.length > 1 && text[1] != ' ') {
 
-function handleResponse(bot, responses, messageInfo) {
-    for (var i = 0; i < responses.length; i++) {
-        for (var j = 0; j < responses[i].triggers.length; j++) {
-            if (messageInfo.text.toLowerCase().indexOf(
-            responses[i].triggers[j]) != -1) {
-                bot.say(messageInfo.channel, responses[i].response);
+            let command = tokenizeCommand(text)
+
+            var commandFunction = getFunction(command.name, userModules);
+
+            if (commandFunction) {
+                executeCommand(bot, messageInfo, command.args, commandFunction);
+            } else {
+                bot.say(messageInfo.channel, 'Command not found');
             }
         }
+    }
+
+    function handleResponse(messageInfo) {
+        for (var i = 0; i < responses.length; i++) {
+            for (var j = 0; j < responses[i].triggers.length; j++) {
+                if (messageInfo.text.toLowerCase().indexOf(
+                responses[i].triggers[j]) != -1) {
+                    bot.say(messageInfo.channel, responses[i].response);
+                }
+            }
+        }
+    }
+
+    return {
+        handleCommand,
+        handleResponse
     }
 }
 
 module.exports = {
-    handleCommand,
-    handleResponse
+    createHandler
 }

@@ -1,3 +1,5 @@
+const messageService = require('../services/message')
+
 function create(config) {
     const botModule = require("./" + config.botModule)
     return botModule.create(config)
@@ -5,7 +7,9 @@ function create(config) {
 
 function addListenersTo(bot, config) {
     const botModule = require("./" + config.botModule)
-    return botModule.addListenersTo(bot, config)
+    let handler = messageService.createHandler(bot, config.userModules,
+        config.responses)
+    return botModule.addListenersTo(bot, handler, config)
 }
 
 module.exports = {
