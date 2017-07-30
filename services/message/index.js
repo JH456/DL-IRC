@@ -1,11 +1,15 @@
+'use strict'
+
 function getFunction(name, userModules) {
     let command;
     userModules.forEach(module => {
         let moduleCommands = module.commands
-        for (var i = 0; i < moduleCommands.length; i++) {
-            var names = moduleCommands[i].names;
-            for (var j = 0; j < names.length; j++) {
-                if (names[j] == name) command = moduleCommands[i];
+        for (let i = 0; i < moduleCommands.length; i++) {
+            let names = moduleCommands[i].names;
+            for (let j = 0; j < names.length; j++) {
+                if (names[j] === name) {
+                    command = moduleCommands[i];
+                }
             }
         }
     })
@@ -17,60 +21,66 @@ function argumentsException (bot, messageInfo) {
 }
 
 function executeCommand(bot, messageInfo, args, command) {
-    var called = false;
-    var functions = command.functions;
+    let called = false;
+    let functions = command.functions;
 
-    if (command.allowedUsers != 'ALL'
-    && command.allowedUsers.indexOf(
-    messageInfo.from) == -1) {
+    if (command.allowedUsers !== 'ALL' &&
+        command.allowedUsers.indexOf(
+        messageInfo.from) === -1) {
         bot.say(messageInfo.channel, "Permission denied.");
         return;
     }
 
-    for (var i = 0; i < functions.length && !called; i++) {
+    for (let i = 0; i < functions.length && !called; i++) {
 
-        var argsCode = functions[i].argsCode;
+        let argsCode = functions[i].argsCode;
 
         // If argscode is just a number rather than an array, make r an array
         //of length 0, otherwise make it an array of argscode's length
-        var r = typeof argsCode == 'number'
-        ? new Array(0)
-        : new Array(argsCode.length);
+        let r = typeof argsCode === 'number' ?
+            new Array(0)
+            : new Array(argsCode.length);
 
-        if ( !(argsCode == 0 && args.length == 0)
-        && (argsCode.length != args.length)
-        && (argsCode[argsCode.length-1] != 'a') ) {
+        if ( !(argsCode === 0 && args.length === 0) &&
+            (argsCode.length !== args.length) &&
+            (argsCode[argsCode.length-1] !== 'a') ) {
             continue;
         }
-        var invalid = false;
-        for (var j = 0; j < argsCode.length; j++) {
-            if (argsCode[j] == 'n') {
+        let invalid = false;
+        for (let j = 0; j < argsCode.length; j++) {
+            if (argsCode[j] === 'n') {
                 r[j] = parseFloat(args[j]);
                 if (isNaN(r[j])) {
                     invalid = true;
                     break;
                 }
-            } else if (argsCode[j] == 'i') {
+            } else if (argsCode[j] === 'i') {
                 r[j] = parseInt(args[j]);
                 if (isNaN(r[j])) {
                     invalid = true;
                     break;
                 }
-            } else r[j] = args[j];
+            } else {
+                r[j] = args[j];
+            }
         }
 
-        for (var j = 0; j < r.length; j++) {
-            if (r[j] == undefined) {
+        for (let j = 0; j < r.length; j++) {
+            if (r[j] === undefined) {
                 invalid = true;
                 break;
             }
         }
-        if (invalid) continue;
+        if (invalid) {
+            continue;
+        }
         called = true;
         functions[i].funcRef(bot, messageInfo, r);
     }
 
-    if (!called) argumentsException(bot, messageInfo);
+    if (!called) {
+        argumentsException(bot, messageInfo);
+    }
 }
 
 function tokenizeCommand(text, commandPrefix) {
@@ -116,13 +126,13 @@ function createHandler(bot, userModuleNames, commandPrefix) {
 
     function handleCommand(messageInfo) {
         let text = messageInfo.text
-        if (text.indexOf(commandPrefix) == 0
-            && text.length > commandPrefix.length
-            && text[commandPrefix.length] != ' ') {
+        if (text.indexOf(commandPrefix) === 0 &&
+            text.length > commandPrefix.length &&
+            text[commandPrefix.length] !==  ' ') {
 
             let command = tokenizeCommand(text, commandPrefix)
 
-            var commandFunction = getFunction(command.name, userModules);
+            let commandFunction = getFunction(command.name, userModules);
 
             if (commandFunction) {
                 executeCommand(bot, messageInfo, command.args, commandFunction);
@@ -135,10 +145,10 @@ function createHandler(bot, userModuleNames, commandPrefix) {
     function handleResponse(messageInfo) {
         userModules.map(module => module.responses).forEach((responses) => {
             if (responses) {
-                for (var i = 0; i < responses.length; i++) {
-                    for (var j = 0; j < responses[i].triggers.length; j++) {
+                for (let i = 0; i < responses.length; i++) {
+                    for (let j = 0; j < responses[i].triggers.length; j++) {
                         if (messageInfo.text.toLowerCase().indexOf(
-                        responses[i].triggers[j]) != -1) {
+                        responses[i].triggers[j]) !== -1) {
                             bot.say(messageInfo.channel, responses[i].response);
                         }
                     }

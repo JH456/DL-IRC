@@ -1,3 +1,5 @@
+'use strict'
+
 const irc = require('irc')
 
 function create(config) {
@@ -10,7 +12,7 @@ function create(config) {
         realName: config.botName
     });
 
-    bot.addListener("registered", function(message) {
+    bot.addListener("registered", function() {
         bot.say("nickserv", config.nickservMessage);
     });
 

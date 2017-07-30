@@ -1,3 +1,5 @@
+'use strict'
+
 const messageService = require('../services/message')
 
 function create(config) {
