@@ -84,6 +84,9 @@ function executeCommand(bot, messageInfo, args, command) {
 }
 
 function tokenizeCommand(text, commandPrefix) {
+    if (!text) {
+        return;
+    }
     let rawArgs = text.split(' ');
     let commandName = rawArgs.splice(0, 1)[0]
         .substring(commandPrefix.length).toLowerCase()
@@ -126,7 +129,7 @@ function createHandler(bot, userModuleNames, commandPrefix) {
 
     function handleCommand(messageInfo) {
         let text = messageInfo.text
-        if (text.indexOf(commandPrefix) === 0 &&
+        if (text && text.indexOf(commandPrefix) === 0 &&
             text.length > commandPrefix.length &&
             text[commandPrefix.length] !==  ' ') {
 
@@ -147,7 +150,7 @@ function createHandler(bot, userModuleNames, commandPrefix) {
             if (responses) {
                 for (let i = 0; i < responses.length; i++) {
                     for (let j = 0; j < responses[i].triggers.length; j++) {
-                        if (messageInfo.text.toLowerCase().indexOf(
+                        if (messageInfo.text && messageInfo.text.toLowerCase().indexOf(
                         responses[i].triggers[j]) !== -1) {
                             bot.say(messageInfo.channel, responses[i].response);
                         }
