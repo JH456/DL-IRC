@@ -13,6 +13,7 @@ An extensible JavaScript IRC bot developed with several node packages that can d
     * For restarting on code updates
 
 ### Other
+* build-essential
 * libicu-dev
 * youtube-dl (for downloading the videos)
 * ffmpeg for audio extraction
