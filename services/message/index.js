@@ -43,7 +43,7 @@ function executeCommand(bot, messageInfo, args, command) {
 
         if ( !(argsCode === 0 && args.length === 0) &&
             (argsCode.length !== args.length) &&
-            (argsCode[argsCode.length-1] !== 'a') ) {
+            (argsCode[argsCode.length-1] !== 's') ) {
             continue;
         }
         let invalid = false;
@@ -61,7 +61,11 @@ function executeCommand(bot, messageInfo, args, command) {
                     break;
                 }
             } else {
-                r[j] = args[j];
+                let stringArg = ''
+                for (let k = j; k < args.length; k++) {
+                    stringArg += args[k]
+                }
+                r[j] = stringArg;
             }
         }
 
