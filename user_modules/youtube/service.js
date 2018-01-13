@@ -57,7 +57,7 @@ function getVideo (bot, messageInfo, videoObject) {
 function lookupCallback (bot, messageInfo, videoResults) {
     bot.say(messageInfo.channel, "Here are your options:");
     videoResults.forEach(videoResult => {
-        bot.say(messageInfo.channel, "- " + videoResult.title)
+        bot.say(messageInfo.channel, "- " + videoResult.title + ': ' + videoResult.url)
     })
 }
 
