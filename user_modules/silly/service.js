@@ -3,7 +3,7 @@
 let yoCount = 0
 
 function yoHandler(bot, messageInfo) {
-    if (messageInfo.text.toLowerCase().indexOf('yo') > -1) {
+    if (messageInfo.text && messageInfo.text.toLowerCase().indexOf('yo') > -1) {
         yoCount++
     }
 }

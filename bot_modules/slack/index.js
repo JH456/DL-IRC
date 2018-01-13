@@ -35,7 +35,7 @@ function addListenersTo(bot, handler/*, config*/) {
             let isPm = false // TODO, make this work
             let messageInfo = {
                 from: message.user,
-                text: message.text,
+                text: message.text ? message.text : '',
                 message,
                 channel: message.channel,
                 isPm
