@@ -37,6 +37,7 @@ export SLACK_API_TOKEN=slackAPIToken
 * node dl-irc.js
 
 ## Extending
-* You can add custom commands by editing the config. See the examples in the
-file for how to do this.
+* You can edit the config in server.js to add your user modules.
+* Take a look at the provided user modules for examples of how they should be
+set up.
 * Commands can be restricted to specific users if you so choose.
