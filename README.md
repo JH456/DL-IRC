@@ -19,7 +19,6 @@ An extensible JavaScript IRC bot developed with several node packages that can d
 * ffmpeg for audio extraction
 
 ## Setup
-* npm install
 * All user configuration information is grabbed from environment variables
 right now. Make a file like this and source it.
 ```bash
@@ -34,7 +33,11 @@ export IRC_DOWNLOAD_USER=UserAllowedToDownloadThings
 export BOT_MODULE=slack|irc
 export SLACK_API_TOKEN=slackAPIToken
 ```
-* node dl-irc.js
+* You can install dependencies by running:
+`$ npm install`
+
+* You can run the code by running:
+`$ npm start`
 
 ## Extending
 * You can edit the config in server.js to add your user modules.
