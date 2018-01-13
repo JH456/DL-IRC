@@ -9,6 +9,8 @@ An extensible JavaScript IRC bot developed with several node packages that can d
 	* Used to interface with the YouTube API to perform searches based on keyword.
 * youtube-dl
     * A wrapper around youtube-dl to make the calls a little easier
+* nodemon
+    * For restarting on code updates
 
 ### Other
 * libicu-dev
@@ -28,6 +30,8 @@ export IRC_NICKSERV_PASS=NickservPassForYourBot
 export IRC_SERVER_NAME=irc.whatever.net
 export IRC_CHANNEL_NAME=#channel
 export IRC_DOWNLOAD_USER=UserAllowedToDownloadThings
+export BOT_MODULE=slack|irc
+export SLACK_API_TOKEN=slackAPIToken
 ```
 * node dl-irc.js
 
