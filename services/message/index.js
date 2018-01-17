@@ -35,51 +35,35 @@ function executeCommand(bot, messageInfo, args, command) {
 
         let argsCode = functions[i].argsCode;
 
-        // If argscode is just a number rather than an array, make r an array
-        //of length 0, otherwise make it an array of argscode's length
-        let r = typeof argsCode === 'number' ?
-            new Array(0)
-            : new Array(argsCode.length);
+        let convertedArgs = []
 
-        if ( !(argsCode === 0 && args.length === 0) &&
-            (argsCode.length !== args.length) &&
-            (argsCode[argsCode.length-1] !== 's') ) {
-            continue;
-        }
         let invalid = false;
-        for (let j = 0; j < argsCode.length; j++) {
+        if (argsCode === 0 && args.length !== 0 ||
+            argsCode.length > args.length ||
+            argsCode.length < args.length && argsCode[argsCode.length - 1] !== 's') {
+            invalid = true
+        }
+
+        for (let j = 0; !invalid && j < argsCode.length; j++) {
             if (argsCode[j] === 'n') {
-                r[j] = parseFloat(args[j]);
-                if (isNaN(r[j])) {
-                    invalid = true;
-                    break;
-                }
+                convertedArgs.push(parseFloat(args[j]))
+                invalid = isNaN(convertedArgs[j])
             } else if (argsCode[j] === 'i') {
-                r[j] = parseInt(args[j]);
-                if (isNaN(r[j])) {
-                    invalid = true;
-                    break;
-                }
+                convertedArgs.push(parseInt(args[j]))
+                invalid = isNaN(convertedArgs[j])
             } else {
-                let stringArg = ''
-                for (let k = j; k < args.length; k++) {
-                    stringArg += args[k]
-                }
-                r[j] = stringArg;
+                convertedArgs.push(args[j])
             }
         }
 
-        for (let j = 0; j < r.length; j++) {
-            if (r[j] === undefined) {
-                invalid = true;
-                break;
-            }
+        for (let j = argsCode.length; !invalid && j < args.length; j++) {
+            convertedArgs[argsCode.length - 1] += " " + args[j]
         }
-        if (invalid) {
-            continue;
+
+        if (!invalid) {
+            called = true;
+            functions[i].funcRef(bot, messageInfo, convertedArgs);
         }
-        called = true;
-        functions[i].funcRef(bot, messageInfo, r);
     }
 
     if (!called) {
